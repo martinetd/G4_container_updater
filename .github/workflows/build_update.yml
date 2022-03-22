@@ -1,0 +1,37 @@
+name: Build container update
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build swu image
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+      with:
+          repository: atmark-techno/mkswu
+          path: mkswu
+    - name: Install dependencies
+      run: |
+          # podman is not present on ubuntu 20.04 repos, so manually add it
+          . /etc/os-release
+          echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+          curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y podman cpio zstd
+    - name: Build container
+      run: |
+          podman build -t image:latest ./image
+          podman save -o image.tar image:latest
+    - name: Build swu
+      run: |
+          ./mkswu/mkswu --config-dir mkswu.conf.d container.desc
+      env:
+          SWUPDATE_KEY: ${{ secrets.SWUPDATE_KEY }}
+          SWUPDATE_AES_KEY: ${{ secrets.SWUPDATE_AES_KEY }}
+    - name: Upload swu
+      uses: actions/upload-artifact@v3
+      with:
+          name: container.swu
+          path: container.swu
+          if-no-files-found: error
