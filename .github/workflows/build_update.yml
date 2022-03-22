@@ -26,6 +26,7 @@ jobs:
       env:
           SWUPDATE_KEY: ${{ secrets.SWUPDATE_KEY }}
           SWUPDATE_AES_KEY: ${{ secrets.SWUPDATE_AES_KEY }}
+          MKSWU_PRIVKEY_PASS: ${{ secrets.SWUPDATE_KEY_PASS }}
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       if: ${{ github.ref == 'refs/heads/main' }}
