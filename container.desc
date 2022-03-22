@@ -1,0 +1,8 @@
+# version: auto-incrementing value
+# XXX use git describe or something more self-describing than date
+version=0.$(date +%Y.%m%d)
+
+# Don't reboot after update
+POST_ACTION=container
+
+swdesc_embed_container image.tar
