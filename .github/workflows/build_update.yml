@@ -13,12 +13,9 @@ jobs:
           path: mkswu
     - name: Install dependencies
       run: |
-          # podman is not present on ubuntu 20.04 repos, so manually add it
-          . /etc/os-release
-          echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
-          curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key" | sudo apt-key add -
+          # podman and cpio are already present
           sudo apt-get update
-          sudo apt-get install -y podman cpio zstd
+          sudo apt-get install -y zstd
     - name: Build container
       run: |
           podman build -t image:latest ./image
