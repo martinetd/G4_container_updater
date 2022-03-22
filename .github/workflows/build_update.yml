@@ -22,13 +22,13 @@ jobs:
           podman save -o image.tar image:latest
     - name: Build swu
       run: |
-          ./mkswu/mkswu --config-dir mkswu.conf.d container.desc
+          ./mkswu/mkswu --config-dir mkswu.conf.d container.desc -o swu/container.swu
       env:
           SWUPDATE_KEY: ${{ secrets.SWUPDATE_KEY }}
           SWUPDATE_AES_KEY: ${{ secrets.SWUPDATE_AES_KEY }}
-    - name: Upload swu
-      uses: actions/upload-artifact@v3
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
-          name: container.swu
-          path: container.swu
-          if-no-files-found: error
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: swu
