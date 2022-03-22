@@ -1,7 +1,7 @@
 # version: auto-incrementing value
 # XXX use git describe or something more self-describing than date
 version=0.$(date +%Y.%m%d)
-# XXX remove component after mars update release
+# XXX remove component after March update release
 component=container
 
 # Don't reboot after update

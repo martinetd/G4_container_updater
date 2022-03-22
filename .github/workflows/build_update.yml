@@ -11,6 +11,7 @@ jobs:
       with:
           repository: atmark-techno/mkswu
           path: mkswu
+          ref: next
     - name: Install dependencies
       run: |
           # podman and cpio are already present
